@@ -20,7 +20,6 @@ export function useFetchPhotos() {
     setError(null);
 
     try {
-      // Ensure smooth UX and clearly perceptible loading state during refresh & recording
       const [response] = await Promise.all([
         fetch(API_URL, { signal }),
         new Promise((resolve) => setTimeout(resolve, 800)),
@@ -32,11 +31,11 @@ export function useFetchPhotos() {
 
       const data = await response.json();
       setPhotos(data);
+      setLoading(false);
     } catch (err) {
-      // Don't treat intentional aborts as errors
+      // If the request was intentionally aborted (e.g. React StrictMode unmount), do not touch state
       if (err.name === 'AbortError') return;
       setError(err.message || 'Failed to fetch photos. Please check your internet connection.');
-    } finally {
       setLoading(false);
     }
   }, []);

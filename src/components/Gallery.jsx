@@ -68,16 +68,7 @@ export default function Gallery() {
 
   return (
     <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      {/* Search Filter Header (Requirement 4) */}
-      <SearchBar
-        searchTerm={searchTerm}
-        onSearchChange={handleSearchChange}
-        onClearSearch={handleClearSearch}
-        totalResults={photos.length}
-        filteredCount={filteredPhotos.length}
-      />
-
-      {/* Loading State (Requirement 2) */}
+      {/* Loading State (Requirement 2) - prominent full section spinner */}
       {loading && <LoadingSpinner />}
 
       {/* Error State (Requirement 2) */}
@@ -85,54 +76,68 @@ export default function Gallery() {
         <ErrorState message={error} onRetry={refetch} />
       )}
 
-      {/* Empty Search Result State */}
-      {!loading && !error && filteredPhotos.length === 0 && (
-        <div className="text-center py-16 px-4 bg-white border border-slate-200/80 rounded-xl max-w-md mx-auto">
-          <svg
-            className="w-10 h-10 mx-auto text-slate-300 mb-3"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-          <h4 className="text-sm font-semibold text-slate-800">
-            No matching photos found
-          </h4>
-          <p className="text-xs text-slate-500 mt-1">
-            No author matches &ldquo;{searchTerm}&rdquo;. Try another name.
-          </p>
-          <button
-            type="button"
-            onClick={handleClearSearch}
-            className="mt-4 px-3.5 py-1.5 text-xs font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-md transition-colors"
-          >
-            Clear Search
-          </button>
-        </div>
-      )}
+      {/* Content displayed once data has loaded */}
+      {!loading && !error && (
+        <>
+          {/* Search Filter Header (Requirement 4) */}
+          <SearchBar
+            searchTerm={searchTerm}
+            onSearchChange={handleSearchChange}
+            onClearSearch={handleClearSearch}
+            totalResults={photos.length}
+            filteredCount={filteredPhotos.length}
+          />
 
-      {/* Requirement 3: Responsive Grid:
-          - Desktop (lg:): 4 columns
-          - Tablet (md:): 2 columns
-          - Mobile (default): 1 column
-      */}
-      {!loading && !error && filteredPhotos.length > 0 && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {filteredPhotos.map((photo) => (
-            <PhotoCard
-              key={photo.id}
-              photo={photo}
-              isFavourite={favourites.includes(photo.id)}
-              onToggleFavourite={handleToggleFavourite}
-            />
-          ))}
-        </div>
+          {/* Empty Search Result State */}
+          {filteredPhotos.length === 0 && (
+            <div className="text-center py-16 px-4 bg-white border border-slate-200/80 rounded-xl max-w-md mx-auto">
+              <svg
+                className="w-10 h-10 mx-auto text-slate-300 mb-3"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              <h4 className="text-sm font-semibold text-slate-800">
+                No matching photos found
+              </h4>
+              <p className="text-xs text-slate-500 mt-1">
+                No author matches &ldquo;{searchTerm}&rdquo;. Try another name.
+              </p>
+              <button
+                type="button"
+                onClick={handleClearSearch}
+                className="mt-4 px-3.5 py-1.5 text-xs font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-md transition-colors"
+              >
+                Clear Search
+              </button>
+            </div>
+          )}
+
+          {/* Requirement 3: Responsive Grid:
+              - Desktop (lg:): 4 columns
+              - Tablet (md:): 2 columns
+              - Mobile (default): 1 column
+          */}
+          {filteredPhotos.length > 0 && (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {filteredPhotos.map((photo) => (
+                <PhotoCard
+                  key={photo.id}
+                  photo={photo}
+                  isFavourite={favourites.includes(photo.id)}
+                  onToggleFavourite={handleToggleFavourite}
+                />
+              ))}
+            </div>
+          )}
+        </>
       )}
     </section>
   );
