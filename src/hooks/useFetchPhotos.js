@@ -20,10 +20,10 @@ export function useFetchPhotos() {
     setError(null);
 
     try {
-      // Ensure smooth UX and visible loading state so spinner is clearly perceptible
+      // Ensure smooth UX and clearly perceptible loading state during refresh & recording
       const [response] = await Promise.all([
         fetch(API_URL, { signal }),
-        new Promise((resolve) => setTimeout(resolve, 600)),
+        new Promise((resolve) => setTimeout(resolve, 800)),
       ]);
 
       if (!response.ok) {
