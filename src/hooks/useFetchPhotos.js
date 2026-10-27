@@ -20,7 +20,11 @@ export function useFetchPhotos() {
     setError(null);
 
     try {
-      const response = await fetch(API_URL, { signal });
+      // Ensure smooth UX and visible loading state so spinner is clearly perceptible
+      const [response] = await Promise.all([
+        fetch(API_URL, { signal }),
+        new Promise((resolve) => setTimeout(resolve, 600)),
+      ]);
 
       if (!response.ok) {
         throw new Error(`Server returned HTTP ${response.status}: ${response.statusText}`);
